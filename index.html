@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cassolnovo, Lomellina (PV)</title>
+  <link rel="stylesheet" href="wp-content/themes/cassolnovo/reset.css">
+  <link rel="stylesheet" href="themes/cassolnovo/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="header__inner">
+        <div class="header__brand"><a href="index.html" class="header__link">Cassolnovo</a><span class="header__project" id="headerProject"></span></div>
+        <nav class="header__nav" aria-label="Principale">
+          <a class="header__link" href="about.html">About</a>
+        </nav>
+      </div>
+    </header>
+
+    <div class="filtersInfo" id="filtersInfo" aria-live="polite" aria-atomic="true"></div>
+
+    <section class="filters" aria-labelledby="filters-title">
+      <div class="grid filters__inner">
+        <div class="filters__list" id="filtersList" role="toolbar" aria-label="Filtri"></div>
+      </div>
+    </section>
+
+    <main>
+      <section class="projects" id="projects" aria-label="Progetti"></section>
+    </main>
+  </div>
+
+  <div class="modal" id="projectModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="projectTitle">
+    <div class="modal__content">
+      <div class="modal__imgWrap" id="modalImgWrap">
+        <img id="modalImg" class="modal__img" alt="Immagine progetto" />
+        <div class="modal__counter" id="modalCounter">1/1</div>
+      </div>
+    </div>
+  </div>
+  <footer class="site-footer" role="contentinfo">
+    <div class="site-footer__inner">
+      <div class="site-footer__brand">© cassolnovo</div>
+      <nav class="site-footer__links" aria-label="Footer">
+        <a class="sl-lower" href="aguzzi.cecilia@gmail.com">aguzzi.cecilia@gmail.com</a>
+        <a class="sl-lower" href="https://instagram.com/" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a class="sl-lower" href="Disclamer & Privacy policy.html">Disclaimer Privacy Policy</a>
+      </nav>
+    </div>
+  </footer>
+  <script>
+    const manifestVersion = Date.now();
+    let currentManifestSig = '';
+    let pollTimer = null;
+    function ensureManifestLoaded(){
+      return new Promise((resolve)=>{
+        Array.from(document.querySelectorAll('script[data-manifest]')).forEach(s=>s.remove());
+        window.ASSETS_MANIFEST = undefined;
+        const s = document.createElement('script');
+        s.src = `wp-content/manifest.js?v=${Date.now()}`;
+        s.async = false;
+        s.setAttribute('data-manifest','true');
+        s.onload = ()=>resolve();
+        s.onerror = ()=>resolve();
+        document.head.appendChild(s);
+      });
+    }
+    function stripExt(name){ return name.replace(/\.[^.]+$/,''); }
+    function toLowerTrim(s){ return (s || '').toString().trim().toLowerCase(); }
+    function collapseSpaces(s){ return (s || '').toString().replace(/\s+/g,' ').trim(); }
+    function normalizeTagRaw(t){ return collapseSpaces((t||'').replace(/_/g,' ')); }
+    function parseFilename(raw){
+      const base = (raw || '').toString().split('/').pop().trim();
+      if(!base){ return { title:'', tagsKeys:[], tagsDisplay:[] }; }
+      const noExt = stripExt(base);
+      let titlePart = '';
+      let rest = '';
+      if(noExt.startsWith('|')){
+        const second = noExt.indexOf('|', 1);
+        if(second !== -1){
+          titlePart = noExt.slice(1, second);
+          rest = noExt.slice(second+1);
+        } else {
+          titlePart = noExt.replace(/^\|/, '');
+        }
+      } else {
+        const first = noExt.indexOf('|');
+        if(first !== -1){
+          titlePart = noExt.slice(0, first);
+          rest = noExt.slice(first+1);
+        } else {
+          titlePart = noExt;
+        }
+      }
+      const title = collapseSpaces(titlePart.replace(/_/g,' '));
+      const rawTags = rest ? rest.split('-').map(normalizeTagRaw).filter(Boolean) : [];
+      const seen = new Set();
+      const tagsKeys = [], tagsDisplay = [];
+      rawTags.forEach((t)=>{ const key = toLowerTrim(t); if(!seen.has(key)){ seen.add(key); tagsKeys.push(key); tagsDisplay.push(t); } });
+      return { title, tagsKeys, tagsDisplay };
+    }
+
+    const projectsEl = document.getElementById('projects');
+    const filtersList = document.getElementById('filtersList');
+    const filtersInfo = document.getElementById('filtersInfo');
+    const headerProject = document.getElementById('headerProject');
+    const allTags = new Map();
+
+    function buildCard(entry){
+      const isObj = typeof entry === 'object' && entry !== null;
+      const fileName = isObj ? entry.file : entry;
+      const dataName = isObj ? (entry.name || entry.file) : entry;
+      const article = document.createElement('article');
+      article.className = 'project-card';
+      const figure = document.createElement('figure');
+      const img = document.createElement('img');
+      const src = `./wp-content/${fileName.split('/').map(encodeURIComponent).join('/')}`;
+      img.src = `${src}?v=${manifestVersion}`;
+      img.alt = 'Immagine progetto';
+      img.setAttribute('data-filename', dataName);
+      img.setAttribute('data-file', fileName);
+      img.addEventListener('error', ()=>{ console.warn('Immagine non trovata:', img.getAttribute('src')); }, { once:true });
+      figure.appendChild(img);
+      const h3 = document.createElement('h3'); h3.className = 'project-card__title';
+      figure.appendChild(h3);
+      const tagsDiv = document.createElement('div'); tagsDiv.className = 'project-card__tags';
+      article.appendChild(figure); article.appendChild(tagsDiv);
+
+      const { title, tagsKeys, tagsDisplay } = parseFilename(dataName);
+      h3.textContent = title;
+      // accumulate tags for filters (chips remain hidden in UI)
+      tagsDisplay.forEach((label, idx)=>{
+        const key = tagsKeys[idx];
+        const prev = allTags.get(key);
+        const next = { label, count: (prev && prev.count ? prev.count : 0) + 1 };
+        allTags.set(key, next);
+      });
+      article.dataset.tags = JSON.stringify(tagsKeys);
+      projectsEl.appendChild(article);
+    }
+
+    function getEmbeddedAssets(){ return Array.isArray(window.ASSETS_MANIFEST) ? window.ASSETS_MANIFEST : []; }
+
+    async function loadAssetsList(){
+      try{
+        const res = await fetch(`wp-content/?v=${Date.now()}`);
+        if(res.ok){
+          const html = await res.text();
+          const matches = Array.from(html.matchAll(/href=["']([^"']+\.(?:jpg|jpeg|png|webp))["']/ig)).map(m=>decodeURIComponent(m[1]));
+          const unique = Array.from(new Set(matches.map(n=>n.split('/').pop())));
+          if(unique.length){ return unique.map(file => ({ file, name:file })); }
+        }
+      }catch(_){ }
+      return getEmbeddedAssets();
+    }
+
+    let projectsClickBound = false;
+    function renderFromList(list){
+      projectsEl.innerHTML = '';
+      allTags.clear();
+      list.forEach(buildCard);
+      const validKeys = new Set(Array.from(allTags.keys()));
+      Array.from(active).forEach(k=>{ if(!validKeys.has(k)) active.delete(k); });
+      if(!projectsClickBound){
+        projectsEl.addEventListener('click', (e)=>{
+          const card = e.target.closest('.project-card'); if(!card) return;
+          const img = card.querySelector('img'); if(img) openProject(img);
+        });
+        projectsClickBound = true;
+      }
+      renderFilters();
+      renderFilterInfo();
+    }
+
+    const active = new Set();
+    function renderFilters(){
+      filtersList.innerHTML = '';
+      Array.from(allTags.entries())
+        .forEach(([key,meta])=>{
+        const btn = document.createElement('button'); btn.type='button'; btn.className='pill pill--button'; btn.textContent=meta.label; btn.setAttribute('data-tag', key); btn.setAttribute('aria-pressed', active.has(key)?'true':'false');
+        btn.addEventListener('click', ()=>{
+          if(active.has(key)){
+            active.clear();
+          } else {
+            active.clear(); active.add(key);
+          }
+          applyFilter();
+          renderFilters();
+          renderFilterInfo();
+        });
+        filtersList.appendChild(btn);
+      });
+    }
+
+    function applyFilter(){
+      const cardsNow = Array.from(projectsEl.querySelectorAll('.project-card'));
+      if(active.size===0){ cardsNow.forEach(c=>c.style.display=''); renderFilterInfo(); return; }
+      const act = Array.from(active);
+      cardsNow.forEach(card=>{ const tags = JSON.parse(card.dataset.tags || '[]'); const show = tags.some(t => act.includes(t)); card.style.display = show ? '' : 'none'; });
+      renderFilterInfo();
+    }
+
+    function renderFilterInfo(){
+      if(!filtersInfo) return;
+      if(active.size !== 1){ filtersInfo.classList.remove('filtersInfo--visible'); filtersInfo.innerHTML=''; return; }
+      const key = Array.from(active)[0];
+      const meta = allTags.get(key) || { label:'', count:0 };
+      const count = meta.count || 0;
+      const frag = document.createDocumentFragment();
+      const s1 = document.createElement('span'); s1.className = 'filtersInfo__prefix'; s1.textContent = 'Filter by';
+      const s2 = document.createElement('span'); s2.className = 'filtersInfo__name'; s2.textContent = meta.label || '';
+      const s3 = document.createElement('span'); s3.className = 'filtersInfo__count'; s3.textContent = `(${count})`;
+      frag.appendChild(s1); frag.appendChild(s2); frag.appendChild(s3);
+      filtersInfo.innerHTML = '';
+      filtersInfo.appendChild(frag);
+      filtersInfo.classList.add('filtersInfo--visible');
+    }
+
+    let lastScrollY = 0; let orderedCards = []; let currentIndex = 0;
+    const modal = document.getElementById('projectModal');
+    const modalImg = document.getElementById('modalImg');
+    const modalCounter = document.getElementById('modalCounter');
+
+    function updateCounter(){ modalCounter.textContent = `${currentIndex+1}/${orderedCards.length}`; }
+
+    function fileParamForIndex(index){
+      const el = orderedCards[index];
+      if(!el) return '';
+      const file = el.getAttribute('data-file') || '';
+      return encodeURIComponent(file);
+    }
+
+    function setUrlForIndex(index, replace=false){
+      const params = new URLSearchParams(window.location.search);
+      const file = fileParamForIndex(index);
+      if(file){ params.set('f', file); } else { params.delete('f'); }
+      const nextUrl = `${window.location.pathname}?${params.toString()}`;
+      const state = { f:file, idx:index };
+      if(replace){ history.replaceState(state, '', nextUrl); } else { history.pushState(state, '', nextUrl); }
+    }
+
+    function openProject(imgEl){
+      lastScrollY = window.scrollY || 0;
+      orderedCards = Array.from(projectsEl.querySelectorAll('.project-card'))
+        .filter(c => c.style.display !== 'none')
+        .map(c => c.querySelector('img'))
+        .filter(Boolean);
+      currentIndex = orderedCards.indexOf(imgEl);
+      const dataName = imgEl.getAttribute('data-filename') || '';
+      const { title } = parseFilename(dataName);
+      headerProject.textContent = title;
+      document.body.classList.add('is-detail');
+      showAt(currentIndex);
+      modal.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; document.addEventListener('keydown', onKey);
+      // bind swipe listeners
+      modal.addEventListener('touchstart', onTouchStart, { passive:true });
+      modal.addEventListener('touchend', onTouchEnd, { passive:true });
+      setUrlForIndex(currentIndex);
+    }
+
+    function showAt(index){
+      if(!orderedCards || !orderedCards.length) return;
+      if(index < 0){ index = orderedCards.length - 1; }
+      if(index >= orderedCards.length){ index = 0; }
+      currentIndex = index;
+      const target = orderedCards[index];
+      const dataName = target.getAttribute('data-filename') || target.getAttribute('src') || '';
+      const { title } = parseFilename(dataName);
+      const dataFile = target.getAttribute('data-file');
+      if(dataFile){
+        const msrc = `./wp-content/${dataFile.split('/').map(encodeURIComponent).join('/')}`;
+        modalImg.src = `${msrc}?v=${manifestVersion}`;
+      } else {
+        modalImg.src = target.getAttribute('src');
+      }
+      headerProject.textContent = title;
+      updateCounter();
+      setUrlForIndex(currentIndex, true);
+    }
+
+    function closeProject(){ modal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; document.removeEventListener('keydown', onKey); modal.removeEventListener('touchstart', onTouchStart); modal.removeEventListener('touchend', onTouchEnd); document.body.classList.remove('is-detail'); headerProject.textContent=''; window.scrollTo({ top:lastScrollY, behavior:'instant' }); }
+    function onKey(e){ if(e.key==='Escape'){ closeProject(); } if(e.key==='ArrowLeft'){ showAt(currentIndex-1); } if(e.key==='ArrowRight'){ showAt(currentIndex+1); } }
+
+    document.addEventListener('click', (e)=>{ if(e.target === modal){ closeProject(); } });
+
+    window.addEventListener('popstate', (ev)=>{
+      const params = new URLSearchParams(window.location.search);
+      const f = params.get('f');
+      if(f){
+        // find corresponding image and open
+        const img = Array.from(projectsEl.querySelectorAll('img')).find(el => (el.getAttribute('data-file')||'') === decodeURIComponent(f));
+        if(img){ openProject(img); }
+      } else {
+        // close modal if open
+        if(modal.getAttribute('aria-hidden') === 'false'){ closeProject(); }
+      }
+    });
+
+    function signatureFor(list){
+      try { return JSON.stringify(list.map(e=>`${e.name}|${e.file}`).sort()); } catch(_){ return ''; }
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      await ensureManifestLoaded();
+      const list = getEmbeddedAssets();
+      renderFromList(list);
+      currentManifestSig = signatureFor(list);
+      // open from URL if f param is present
+      const params = new URLSearchParams(window.location.search);
+      const f = params.get('f');
+      if(f){
+        const decoded = decodeURIComponent(f);
+        const img = Array.from(projectsEl.querySelectorAll('img')).find(el => (el.getAttribute('data-file')||'') === decoded);
+        if(img){ openProject(img); }
+      }
+      // Hide filters when footer is visible
+      const footerEl = document.querySelector('.site-footer');
+      const filtersEl = document.querySelector('.filters');
+      if(footerEl && filtersEl){
+        const io = new IntersectionObserver((entries)=>{
+          const intersecting = entries.some(e => e.isIntersecting);
+          if(intersecting){ filtersEl.classList.add('filters--hidden'); }
+          else { filtersEl.classList.remove('filters--hidden'); }
+        }, { root:null, threshold:0 });
+        io.observe(footerEl);
+      }
+
+      pollTimer = setInterval(async ()=>{
+        await ensureManifestLoaded();
+        const next = getEmbeddedAssets();
+        const sig = signatureFor(next);
+        if(sig !== currentManifestSig){
+          const y = window.scrollY || 0;
+          renderFromList(next);
+          currentManifestSig = sig;
+          window.scrollTo({ top: y, behavior: 'instant' });
+        }
+      }, 1500);
+    });
+
+    // Touch swipe navigation in modal (mobile)
+    let touchStartX = 0; let touchStartY = 0; let touchActive = false;
+    function onTouchStart(ev){
+      const t = ev.changedTouches && ev.changedTouches[0]; if(!t) return;
+      touchStartX = t.clientX; touchStartY = t.clientY; touchActive = true;
+    }
+    function onTouchEnd(ev){
+      if(!touchActive) return; touchActive = false;
+      const t = ev.changedTouches && ev.changedTouches[0]; if(!t) return;
+      const dx = t.clientX - touchStartX; const dy = t.clientY - touchStartY;
+      if(Math.abs(dx) > 40 && Math.abs(dy) < 40){
+        if(dx < 0){ showAt(currentIndex+1); } else { showAt(currentIndex-1); }
+      }
+    }
+  </script>
+</body>
+</html>
+
