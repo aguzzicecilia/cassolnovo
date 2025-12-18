@@ -74,7 +74,7 @@ header{position:fixed;top:0;left:0;right:0;height:var(--header-h);padding:0;back
   width:17px;
   height:17px;
   pointer-events:none;
-  background:url('wp-content/icons/close.svg') center/contain no-repeat;
+  background:url('../../wp-content/icons/close.svg') center/contain no-repeat;
 }
 .pill--static{cursor:default}
 .pill--static{padding:0;border:none}
@@ -197,7 +197,7 @@ body.is-detail .filtersInfo{display:none}
     content:'';
     display:inline-block;
     width:17px;height:17px;margin-right:6px;vertical-align:baseline;line-height:17px;
-    background:url('wp-content/icons/close.svg') center/contain no-repeat;
+    background:url('../../wp-content/icons/close.svg') center/contain no-repeat;
   }
   .pill--button[aria-pressed="true"]:hover{color:#fff}
   /* Mobile filter button height */
