@@ -224,6 +224,7 @@
     const modal = document.getElementById('projectModal');
     const modalImg = document.getElementById('modalImg');
     const modalCounter = document.getElementById('modalCounter');
+    const modalImgWrap = document.getElementById('modalImgWrap');
 
     function updateCounter(){ modalCounter.textContent = `${currentIndex+1}/${orderedCards.length}`; }
 
@@ -259,6 +260,8 @@
       // bind swipe listeners
       modal.addEventListener('touchstart', onTouchStart, { passive:true });
       modal.addEventListener('touchend', onTouchEnd, { passive:true });
+      // enable desktop-only cursor behavior
+      if(isDesktop()){ enableDesktopCarouselCursor(); }
       setUrlForIndex(currentIndex);
     }
 
@@ -282,7 +285,7 @@
       setUrlForIndex(currentIndex, true);
     }
 
-    function closeProject(){ modal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; document.removeEventListener('keydown', onKey); modal.removeEventListener('touchstart', onTouchStart); modal.removeEventListener('touchend', onTouchEnd); document.body.classList.remove('is-detail'); headerProject.textContent=''; window.scrollTo({ top:lastScrollY, behavior:'instant' }); }
+    function closeProject(){ modal.setAttribute('aria-hidden','true'); document.body.style.overflow=''; document.removeEventListener('keydown', onKey); modal.removeEventListener('touchstart', onTouchStart); modal.removeEventListener('touchend', onTouchEnd); disableDesktopCarouselCursor(); document.body.classList.remove('is-detail'); headerProject.textContent=''; window.scrollTo({ top:lastScrollY, behavior:'instant' }); }
     function onKey(e){ if(e.key==='Escape'){ closeProject(); } if(e.key==='ArrowLeft'){ showAt(currentIndex-1); } if(e.key==='ArrowRight'){ showAt(currentIndex+1); } }
 
     document.addEventListener('click', (e)=>{ if(e.target === modal){ closeProject(); } });
@@ -297,6 +300,76 @@
       } else {
         // close modal if open
         if(modal.getAttribute('aria-hidden') === 'false'){ closeProject(); }
+      }
+    });
+
+    // Desktop-only custom cursor and click halves inside carousel
+    let cursorHint = null;
+    let cursorEnabled = false;
+    function isDesktop(){
+      return window.matchMedia('(hover:hover) and (pointer:fine)').matches && window.innerWidth > 800;
+    }
+    function ensureCursorHint(){
+      if(cursorHint) return;
+      cursorHint = document.createElement('div');
+      cursorHint.className = 'cursorHint';
+      cursorHint.setAttribute('aria-hidden','true');
+      document.body.appendChild(cursorHint);
+    }
+    function showCursorHint(){ if(cursorHint){ cursorHint.classList.add('cursorHint--show'); } }
+    function hideCursorHint(){ if(cursorHint){ cursorHint.classList.remove('cursorHint--show'); } }
+    function setCursorHintLabel(label){ if(cursorHint){ cursorHint.textContent = label; } }
+    function moveCursorHint(x,y){ if(cursorHint){ cursorHint.style.left = `${x}px`; cursorHint.style.top = `${y}px`; } }
+    function sideFromEvent(ev){
+      const rect = modalImgWrap.getBoundingClientRect();
+      return (ev.clientX - rect.left) >= rect.width/2 ? 'Next' : 'Prev';
+    }
+    function onWrapEnter(ev){
+      if(!cursorEnabled) return;
+      ensureCursorHint();
+      modalImgWrap.classList.add('custom-cursor');
+      setCursorHintLabel(sideFromEvent(ev));
+      moveCursorHint(ev.clientX, ev.clientY);
+      showCursorHint();
+    }
+    function onWrapMove(ev){
+      if(!cursorEnabled) return;
+      setCursorHintLabel(sideFromEvent(ev));
+      moveCursorHint(ev.clientX, ev.clientY);
+    }
+    function onWrapLeave(){
+      if(!cursorEnabled) return;
+      hideCursorHint();
+      modalImgWrap.classList.remove('custom-cursor');
+    }
+    function onWrapClick(ev){
+      if(!cursorEnabled) return;
+      const side = sideFromEvent(ev);
+      if(side === 'Next'){ showAt(currentIndex+1); } else { showAt(currentIndex-1); }
+    }
+    function enableDesktopCarouselCursor(){
+      if(cursorEnabled || !isDesktop() || !modalImgWrap) return;
+      cursorEnabled = true;
+      ensureCursorHint();
+      modalImgWrap.addEventListener('mouseenter', onWrapEnter);
+      modalImgWrap.addEventListener('mousemove', onWrapMove);
+      modalImgWrap.addEventListener('mouseleave', onWrapLeave);
+      modalImgWrap.addEventListener('click', onWrapClick);
+    }
+    function disableDesktopCarouselCursor(){
+      if(!cursorEnabled || !modalImgWrap) return;
+      cursorEnabled = false;
+      hideCursorHint();
+      modalImgWrap.classList.remove('custom-cursor');
+      modalImgWrap.removeEventListener('mouseenter', onWrapEnter);
+      modalImgWrap.removeEventListener('mousemove', onWrapMove);
+      modalImgWrap.removeEventListener('mouseleave', onWrapLeave);
+      modalImgWrap.removeEventListener('click', onWrapClick);
+    }
+    window.addEventListener('resize', ()=>{
+      // Toggle behavior on breakpoint/pointer changes
+      if(modal.getAttribute('aria-hidden') === 'false'){
+        if(isDesktop()){ enableDesktopCarouselCursor(); } else { disableDesktopCarouselCursor(); }
       }
     });
 

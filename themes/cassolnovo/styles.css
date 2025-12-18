@@ -60,8 +60,8 @@ header{position:fixed;top:0;left:0;right:0;height:var(--header-h);padding:0;back
 .pill{display:inline-block;padding:var(--pill-pad);border-radius:var(--pill-r);border:1px solid #000;color:#000;background:transparent;text-decoration:none;line-height:1;user-select:none;font-size:var(--pill-font-size)}
 .pill--button{cursor:pointer;padding:7px 12px 6px;background:#fff;color:#000;border:1px solid #000;display:inline-flex;align-items:center;gap:12px;border-radius: 2px;}
 .pill--button:hover{background:#000;color:#fff;border-color:#000}
-.pill--button[aria-pressed="true"]{background:#000;color:#fff;border-color:#000}
-.pill--button[aria-pressed="true"]:hover{background:#000;color:#fff}
+.pill--button[aria-pressed="true"]{background:#fff;color:#000;border-color:#000}
+.pill--button[aria-pressed="true"]:hover{background:#fff;color:inherit}
 /* Selected filter hover shows SVG close icon (desktop) */
 /* Selected filter hover shows SVG close icon (desktop) */
 .pill--button[aria-pressed="true"]:hover{position:relative;color:transparent;padding:9px 12px 6px}
@@ -112,6 +112,26 @@ main{margin-top:62px;flex:1}
 .modal__navBtn--next{right:0;cursor:e-resize}
 .modal__navBtn--prev::after{content:'PREV';position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#000;font:inherit;text-transform:uppercase;pointer-events:none;opacity:1}
 .modal__navBtn--next::after{content:'NEXT';position:absolute;right:10px;top:50%;transform:translateY(-50%);color:#000;font:inherit;text-transform:uppercase;pointer-events:none;opacity:1}
+
+/* Desktop-only custom cursor hint for carousel */
+.cursorHint{
+  position:fixed;
+  left:0; top:0;
+  transform:translate(-50%,-50%);
+  z-index:20001;
+  display:none;
+  pointer-events:none;
+  background:transparent;
+  color:#000;
+  border-radius:0;
+  padding:0;
+  font-size:12px;
+  line-height:1;
+  letter-spacing:0.4px;
+  text-transform:uppercase;
+}
+.cursorHint--show{ display:block }
+.modal__imgWrap.custom-cursor{ cursor:none }
 
 /* Hide filters in project detail */
 body.is-detail .filters{display:none}
@@ -190,7 +210,7 @@ body.is-detail .filtersInfo{display:none}
   .filters__inner{padding-left:var(--filters-left);width:100%;overflow-x:auto}
   .filters__list{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;gap:12px}
   /* Mobile selected filter shows title + icon with 6px space */
-  .pill--button[aria-pressed="true"]{color:#fff}
+  .pill--button[aria-pressed="true"]{color:#000}
   /* Ensure exact 6px between icon and text */
   .pill--button[aria-pressed="true"]{gap:0}
   .pill--button[aria-pressed="true"]::before{
@@ -199,7 +219,7 @@ body.is-detail .filtersInfo{display:none}
     width:17px;height:17px;margin-right:6px;vertical-align:baseline;line-height:17px;
     background:url('../../wp-content/icons/close.svg') center/contain no-repeat;
   }
-  .pill--button[aria-pressed="true"]:hover{color:#fff}
+  .pill--button[aria-pressed="true"]:hover{color:#000}
   /* Mobile filter button height */
   .pill--button{min-height:27px;font-size:12px;text-transform:uppercase;align-items:center}
   /* Hide desktop cursor hints on mobile */
@@ -210,6 +230,8 @@ body.is-detail .filtersInfo{display:none}
   /* Paragraph spacing on mobile like desktop (uses var(--space-m) = 12px) */
   .bloc-paragraf-l p{grid-column:1 / -1;font-size:20px;line-height:1.1;letter-spacing:0.4px;margin:0 0 var(--space-m) 0}
   .bloc-paragraf-l p:last-child{margin-bottom:0}
+  /* Never show desktop cursor hint on mobile */
+  .cursorHint{ display:none !important }
   /* About columns stacking */
   .about-columns__heading{grid-column:1 / -1;margin:0 0 var(--space-m) 0}
   .about-columns__items{grid-column:1 / -1;display:block}
