@@ -11,8 +11,8 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="loaderOverlay" id="loaderOverlay" aria-live="polite" aria-atomic="true">
-    <div class="loader__text" id="loaderText">Loading 0%</div>
+  <div class="loaderOverlay" id="loaderOverlay" aria-live="polite" aria-atomic="true" style="position:fixed;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;background:#fff;z-index:30000;">
+    <div class="loader__text" id="loaderText" style="font:inherit;text-transform:uppercase;">Loading 0%</div>
   </div>
   <div class="page">
     <header>
@@ -405,6 +405,7 @@
       const loaderText = document.getElementById('loaderText');
       const minShowMs = 300;
       const startTs = Date.now();
+      const seenLoader = (localStorage.getItem('seenLoader') === '1');
 
       await ensureManifestLoaded();
       const list = getEmbeddedAssets();
@@ -415,18 +416,24 @@
         const pct = totalCount > 0 ? Math.round((loaded/totalCount)*100) : 100;
         if(loaderText){ loaderText.textContent = `Loading ${pct}%`; }
       }
-      setProgress(0, total);
-      await preloadAssets(list, (loaded, totalCount)=>{ setProgress(loaded, totalCount); });
-
-      // Ensure loader stays briefly to avoid flicker
-      const elapsed = Date.now() - startTs;
-      if(elapsed < minShowMs){
-        await new Promise(r => setTimeout(r, minShowMs - elapsed));
-      }
-      // Hide loader with fade out
-      if(loaderEl){
-        loaderEl.classList.add('loaderOverlay--hide');
-        setTimeout(()=>{ loaderEl.style.display = 'none'; }, 220);
+      if(!seenLoader){
+        setProgress(0, total);
+        await preloadAssets(list, (loaded, totalCount)=>{ setProgress(loaded, totalCount); });
+        // Ensure loader stays briefly to avoid flicker
+        const elapsed = Date.now() - startTs;
+        if(elapsed < minShowMs){
+          await new Promise(r => setTimeout(r, minShowMs - elapsed));
+        }
+        // Hide loader with fade out
+        if(loaderEl){
+          loaderEl.classList.add('loaderOverlay--hide');
+          setTimeout(()=>{ loaderEl.style.display = 'none'; }, 220);
+        }
+        // Mark as seen for future visits
+        try{ localStorage.setItem('seenLoader', '1'); }catch(_){}
+      } else {
+        // Skip loader on subsequent visits
+        if(loaderEl){ loaderEl.style.display = 'none'; }
       }
 
       // Now render archive

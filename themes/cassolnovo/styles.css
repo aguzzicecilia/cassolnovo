@@ -141,6 +141,8 @@ main{margin-top:62px;flex:1}
 /* Full-screen loader */
 .loaderOverlay{
   position:fixed; inset:0;
+  /* Fallbacks for older browsers */
+  top:0; left:0; right:0; bottom:0;
   background:#fff;
   display:flex; align-items:center; justify-content:center;
   z-index:30000;
