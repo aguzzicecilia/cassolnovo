@@ -138,6 +138,30 @@ main{margin-top:62px;flex:1}
 .cursorHint--show{ display:block }
 .modal__imgWrap.custom-cursor{ cursor:none }
 
+/* Full-screen loader */
+.loaderOverlay{
+  position:fixed; inset:0;
+  background:#fff;
+  display:flex; align-items:center; justify-content:center;
+  z-index:30000;
+  opacity:1; transition:opacity 200ms ease;
+}
+.loaderOverlay--hide{ opacity:0 }
+.loader__text{
+  font-family:var(--font-family);
+  font-size:var(--font-size);
+  font-weight:400;
+  letter-spacing:var(--ls);
+  text-transform:uppercase;
+  color:#000;
+  animation:loaderPulse 1.2s ease-in-out infinite;
+}
+@keyframes loaderPulse{
+  0%{ opacity:0.6 }
+  50%{ opacity:1 }
+  100%{ opacity:0.6 }
+}
+
 /* Hide filters in project detail */
 body.is-detail .filters{display:none}
 /* Hidden state for filters when overlapping footer */

@@ -11,6 +11,9 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+  <div class="loaderOverlay" id="loaderOverlay" aria-live="polite" aria-atomic="true">
+    <div class="loader__text" id="loaderText">Loading 0%</div>
+  </div>
   <div class="page">
     <header>
       <div class="header__inner">
@@ -144,6 +147,26 @@
     }
 
     function getEmbeddedAssets(){ return Array.isArray(window.ASSETS_MANIFEST) ? window.ASSETS_MANIFEST : []; }
+
+    // Preload assets (images) and report incremental progress
+    function preloadAssets(list, onProgress){
+      return new Promise((resolve)=>{
+        const entries = Array.isArray(list) ? list : [];
+        const total = entries.length;
+        if(total === 0){ if(onProgress) onProgress(0,0); resolve(); return; }
+        let loaded = 0;
+        function done(){ loaded++; if(onProgress){ onProgress(loaded, total); } if(loaded >= total){ resolve(); } }
+        entries.forEach((entry)=>{
+          const isObj = typeof entry === 'object' && entry !== null;
+          const fileName = isObj ? entry.file : entry;
+          const url = `./wp-content/${fileName.split('/').map(encodeURIComponent).join('/')}` + `?v=${manifestVersion}`;
+          const img = new Image();
+          img.onload = ()=>done();
+          img.onerror = (e)=>{ console.warn('Preload failed:', url, e); done(); };
+          img.src = url;
+        });
+      });
+    }
 
     async function loadAssetsList(){
       try{
@@ -378,10 +401,38 @@
     }
 
     window.addEventListener('DOMContentLoaded', async () => {
+      const loaderEl = document.getElementById('loaderOverlay');
+      const loaderText = document.getElementById('loaderText');
+      const minShowMs = 300;
+      const startTs = Date.now();
+
       await ensureManifestLoaded();
       const list = getEmbeddedAssets();
+      const total = (Array.isArray(list) ? list.length : 0);
+
+      // Update text helper
+      function setProgress(loaded, totalCount){
+        const pct = totalCount > 0 ? Math.round((loaded/totalCount)*100) : 100;
+        if(loaderText){ loaderText.textContent = `Loading ${pct}%`; }
+      }
+      setProgress(0, total);
+      await preloadAssets(list, (loaded, totalCount)=>{ setProgress(loaded, totalCount); });
+
+      // Ensure loader stays briefly to avoid flicker
+      const elapsed = Date.now() - startTs;
+      if(elapsed < minShowMs){
+        await new Promise(r => setTimeout(r, minShowMs - elapsed));
+      }
+      // Hide loader with fade out
+      if(loaderEl){
+        loaderEl.classList.add('loaderOverlay--hide');
+        setTimeout(()=>{ loaderEl.style.display = 'none'; }, 220);
+      }
+
+      // Now render archive
       renderFromList(list);
       currentManifestSig = signatureFor(list);
+
       // open from URL if f param is present
       const params = new URLSearchParams(window.location.search);
       const f = params.get('f');
@@ -402,6 +453,7 @@
         io.observe(footerEl);
       }
 
+      // Start polling after initial render
       pollTimer = setInterval(async ()=>{
         await ensureManifestLoaded();
         const next = getEmbeddedAssets();
