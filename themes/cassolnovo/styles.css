@@ -214,20 +214,14 @@ body.is-detail .filtersInfo{display:none}
   .projects{grid-template-columns:repeat(6,minmax(0,1fr));column-gap:12px}
   .project-card{grid-column:span 3}
   .filters{left:0;right:0;transform:none}
-  .filters__inner{padding-left:var(--filters-left);width:100%;overflow-x:auto}
+  .filters__inner{padding-left:var(--filters-left);padding-right:var(--filters-left);width:100%;overflow-x:auto}
   .filters__list{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;gap:12px}
   /* Mobile selected filter shows title + icon with 6px space */
   .pill--button[aria-pressed="true"]{color:#000}
   /* Ensure exact 6px between icon and text */
-  .pill--button[aria-pressed="true"]{gap:0}
-  .pill--button[aria-pressed="true"]::before{
-    content:'';
-    display:inline-block;
-    width:17px;height:17px;margin-right:6px;vertical-align:baseline;line-height:17px;
-    background:url('../../wp-content/icons/close.svg') center/contain no-repeat;
-    /* Invert black icon to white on black background */
-    filter: brightness(0) invert(1);
-  }
+  .pill--button[aria-pressed="true"]{gap:12px}
+  /* On mobile, hide the X icon when active: show only the label */
+  .pill--button[aria-pressed="true"]::before{ content:none; display:none }
   /* Active state on mobile keeps white label on black */
   .pill--button[aria-pressed="true"]{background:#000;color:#fff;border-color:#000}
   .pill--button[aria-pressed="true"]:hover{color:#fff}
@@ -247,6 +241,9 @@ body.is-detail .filtersInfo{display:none}
   .about-columns__heading{grid-column:1 / -1;margin:0 0 var(--space-m) 0}
   .about-columns__items{grid-column:1 / -1;display:block}
   .about-columns__item{margin:0 0 var(--space-xl) 0}
+  /* Header/title alignment on mobile: align to top, avoid vertical centering */
+  .header__inner{ align-items: flex-start }
+  .header__brand{ align-items: flex-start }
 }
 
 /* Tablet breakpoint ~1200px for A4 */
