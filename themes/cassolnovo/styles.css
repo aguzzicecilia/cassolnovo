@@ -51,6 +51,8 @@ header{position:fixed;top:0;left:0;right:0;height:var(--header-h);padding:0;back
 .header {padding-left: var(--page-margin); padding-right: var(--page-margin);}
 .header__brand{display:flex;align-items:center;gap:12px}
 .header__link{color:#000;text-decoration:none;display:inline-block;padding:12px 12px 8px}
+/* Black header links hover to gray */
+.header__link:hover{color:#878787}
 .header__project{display:none}
 .header__nav{margin-left:0}
 .filters{position:fixed;left:50%;transform:translateX(-50%);bottom:var(--filters-bottom);z-index:10000}
@@ -60,8 +62,9 @@ header{position:fixed;top:0;left:0;right:0;height:var(--header-h);padding:0;back
 .pill{display:inline-block;padding:var(--pill-pad);border-radius:var(--pill-r);border:1px solid #000;color:#000;background:transparent;text-decoration:none;line-height:1;user-select:none;font-size:var(--pill-font-size)}
 .pill--button{cursor:pointer;padding:7px 12px 6px;background:#fff;color:#000;border:1px solid #000;display:inline-flex;align-items:center;gap:12px;border-radius: 2px;}
 .pill--button:hover{background:#000;color:#fff;border-color:#000}
-.pill--button[aria-pressed="true"]{background:#fff;color:#000;border-color:#000}
-.pill--button[aria-pressed="true"]:hover{background:#fff;color:inherit}
+.pill--button[aria-pressed="true"]{background:#000;color:#fff;border-color:#000}
+/* Keep active filter black also on hover (desktop), text hidden to show X icon */
+.pill--button[aria-pressed="true"]:hover{background:#000;color:transparent;border-color:#000}
 /* Selected filter hover shows SVG close icon (desktop) */
 /* Selected filter hover shows SVG close icon (desktop) */
 .pill--button[aria-pressed="true"]:hover{position:relative;color:transparent;padding:9px 12px 6px}
@@ -75,6 +78,8 @@ header{position:fixed;top:0;left:0;right:0;height:var(--header-h);padding:0;back
   height:17px;
   pointer-events:none;
   background:url('../../wp-content/icons/close.svg') center/contain no-repeat;
+  /* Invert black icon to white on black background */
+  filter: brightness(0) invert(1);
 }
 .pill--static{cursor:default}
 .pill--static{padding:0;border:none}
@@ -175,6 +180,8 @@ body.is-detail .filtersInfo{display:none}
 
 /* Text link color in content */
 .bloc-paragraf-l p a,.about-columns__item p a,.typo-l a,.typo-s a,.typo-s-lower a{color:#878787}
+/* Gray content links hover to black */
+.bloc-paragraf-l p a:hover,.about-columns__item p a:hover,.typo-l a:hover,.typo-s a:hover,.typo-s-lower a:hover{color:#000}
 
 .bloc-paragraf-l{display:grid;align-items:start;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--grid-gap);max-width:none;margin:0;padding-left:0;padding-right:0;padding-bottom: var(--space-2xl);margin-left:calc(12px - var(--page-margin));margin-right:calc(12px - var(--page-margin))}
 .bloc-paragraf-l h1{grid-column:1 / span 2;margin:0}
@@ -218,8 +225,12 @@ body.is-detail .filtersInfo{display:none}
     display:inline-block;
     width:17px;height:17px;margin-right:6px;vertical-align:baseline;line-height:17px;
     background:url('../../wp-content/icons/close.svg') center/contain no-repeat;
+    /* Invert black icon to white on black background */
+    filter: brightness(0) invert(1);
   }
-  .pill--button[aria-pressed="true"]:hover{color:#000}
+  /* Active state on mobile keeps white label on black */
+  .pill--button[aria-pressed="true"]{background:#000;color:#fff;border-color:#000}
+  .pill--button[aria-pressed="true"]:hover{color:#fff}
   /* Mobile filter button height */
   .pill--button{min-height:27px;font-size:12px;text-transform:uppercase;align-items:center}
   /* Hide desktop cursor hints on mobile */
@@ -295,4 +306,10 @@ body.is-detail .filtersInfo{display:none}
 body.is-detail .header__project {margin-left: 0; padding: 12px 0 8px 0; display: inline-block;}
 body.is-detail .header__nav .header__link{color:#000}
 body.is-detail .header__brand .header__link{padding-right:0}
+
+/* Ensure header hover works in all states (after overrides above) */
+body:not(.is-detail) .header__link:hover{color:#878787}
+body.is-detail .header__nav .header__link:hover{color:#878787}
+/* In detail view the brand link is gray by default; on hover it should be black */
+body.is-detail .header__brand .header__link:hover{color:#000}
 
