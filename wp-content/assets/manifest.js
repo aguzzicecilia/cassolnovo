@@ -773,8 +773,8 @@ window.ASSETS_MANIFEST = [
     "name": "Via_San_Giorgio,_1962|paesaggi-cartoline"
   },
   {
-    "file": "|Via_San_Giorgio,|paesaggi-cartoline.jpg",
-    "name": "Via_San_Giorgio,|paesaggi-cartoline"
+    "file": "|Via_San_Giorgio_2|paesaggi-cartoline.jpg",
+    "name": "Via_San_Giorgio_2|paesaggi-cartoline"
   },
   {
     "file": "|Via_San_Giorgio_verso_il_ricovero,_1871|paesaggi.jpg",
@@ -801,8 +801,8 @@ window.ASSETS_MANIFEST = [
     "name": "Viale_Rimembranze,_1950|paesaggi-cartoline"
   },
   {
-    "file": "|Viale_delle_Rimembranze,_1956\"|paesaggi.jpg",
-    "name": "Viale_delle_Rimembranze,_1956\"|paesaggi"
+    "file": "|Viale_delle_Rimembranze,_1956|paesaggi.jpg",
+    "name": "Viale_delle_Rimembranze,_1956|paesaggi"
   },
   {
     "file": "|Vignetta_di_un_ragazzo_in_divisa|persone-uomo.jpg",
