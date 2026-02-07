@@ -1,8 +1,8 @@
 // File generato automaticamente. NON modificare a mano.
 window.ASSETS_MANIFEST = [
   {
-    "file": "|\"Don_Rino_Bay\",_9_Febbraio_1964|persone.jpg",
-    "name": "\"Don_Rino_Bay\",_9_Febbraio_1964|persone"
+    "file": "|\"Don_Rino_Baj\",_9_Febbraio_1964|persone.jpg",
+    "name": "\"Don_Rino_Baj\",_9_Febbraio_1964|persone"
   },
   {
     "file": "|\"PIAZZA_COSTA\"_di_Beauregard,_luglio_1871._(Il_Palazzo_dei_Marchesi_Caravaggio-Gonzaga)|persone-paesaggi.jpg",
