@@ -12,7 +12,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, '..');
-const assetsDir = path.join(projectRoot, 'wp-content');
+const assetsDir = path.join(projectRoot, 'wp-content/assets');
 const outFile = path.join(assetsDir, 'manifest.js');
 
 const IMAGE_EXTS = new Set(['.jpg', '.jpeg', '.png', '.webp']);

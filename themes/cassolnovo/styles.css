@@ -322,4 +322,3 @@ body:not(.is-detail) .header__link:hover{color:#878787}
 body.is-detail .header__nav .header__link:hover{color:#878787}
 /* In detail view the brand link is gray by default; on hover it should be black */
 body.is-detail .header__brand .header__link:hover{color:#000}
-

@@ -70,7 +70,7 @@
         Array.from(document.querySelectorAll('script[data-manifest]')).forEach(s=>s.remove());
         window.ASSETS_MANIFEST = undefined;
         const s = document.createElement('script');
-        s.src = `wp-content/manifest.js?v=${Date.now()}`;
+        s.src = `wp-content/assets/manifest.js?v=${Date.now()}`;
         s.async = false;
         s.setAttribute('data-manifest','true');
         s.onload = ()=>resolve();
@@ -127,7 +127,7 @@
       article.className = 'project-card';
       const figure = document.createElement('figure');
       const img = document.createElement('img');
-      const src = `./wp-content/${fileName.split('/').map(encodeURIComponent).join('/')}`;
+      const src = `./wp-content/assets/${fileName.split('/').map(encodeURIComponent).join('/')}`;
       img.src = `${src}?v=${manifestVersion}`;
       img.alt = 'Immagine progetto';
       img.setAttribute('data-filename', dataName);
@@ -286,7 +286,7 @@
       const { title } = parseFilename(dataName);
       const dataFile = target.getAttribute('data-file');
       if(dataFile){
-        const msrc = `./wp-content/${dataFile.split('/').map(encodeURIComponent).join('/')}`;
+        const msrc = `./wp-content/assets/${dataFile.split('/').map(encodeURIComponent).join('/')}`;
         modalImg.src = `${msrc}?v=${manifestVersion}`;
       } else {
         modalImg.src = target.getAttribute('src');

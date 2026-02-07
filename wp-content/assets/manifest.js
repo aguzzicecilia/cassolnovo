@@ -1,12 +1,24 @@
 // File generato automaticamente. NON modificare a mano.
 window.ASSETS_MANIFEST = [
   {
+    "file": "|\"Don_Rino_Bay\",_9_Febbraio_1964|persone.jpg",
+    "name": "\"Don_Rino_Bay\",_9_Febbraio_1964|persone"
+  },
+  {
+    "file": "|\"PIAZZA_COSTA\"_di_Beauregard,_luglio_1871._(Il_Palazzo_dei_Marchesi_Caravaggio-Gonzaga)|persone-paesaggi.jpg",
+    "name": "\"PIAZZA_COSTA\"_di_Beauregard,_luglio_1871._(Il_Palazzo_dei_Marchesi_Caravaggio-Gonzaga)|persone-paesaggi"
+  },
+  {
     "file": "|Aguzzi_Giuseppe|persone-uomo.jpg",
     "name": "Aguzzi_Giuseppe|persone-uomo"
   },
   {
     "file": "|Asilo_d'infanzia|paesaggi-cartoline.jpg",
     "name": "Asilo_d'infanzia|paesaggi-cartoline"
+  },
+  {
+    "file": "|Asilo_d'infanzia|paesaggi.jpg",
+    "name": "Asilo_d'infanzia|paesaggi"
   },
   {
     "file": "|Bambini_che_giocano|persone-bambini.jpg",
@@ -61,6 +73,26 @@ window.ASSETS_MANIFEST = [
     "name": "Bombardiere_Lancaster_Canadese_abbattuto_2|paesaggi"
   },
   {
+    "file": "|Bombardiere_Lancaster_Canadese_abbattuto_3|-paesaggi.jpg",
+    "name": "Bombardiere_Lancaster_Canadese_abbattuto_3|-paesaggi"
+  },
+  {
+    "file": "|Bombardiere_Lancaster_Canadese_abbattuto_4|-paesaggi.jpg",
+    "name": "Bombardiere_Lancaster_Canadese_abbattuto_4|-paesaggi"
+  },
+  {
+    "file": "|CONTRADA _NOVARA,_1871_(oggi_Via_Carlo_Alberto_2|paesaggi.jpg",
+    "name": "CONTRADA _NOVARA,_1871_(oggi_Via_Carlo_Alberto_2|paesaggi"
+  },
+  {
+    "file": "|CONTRADA _OVARA,_1871_(oggi_Via_Carlo_Alberto|paesaggi.jpg",
+    "name": "CONTRADA _OVARA,_1871_(oggi_Via_Carlo_Alberto|paesaggi"
+  },
+  {
+    "file": "|Cambio_di_squadra_delle_mondiriso|persone.jpg",
+    "name": "Cambio_di_squadra_delle_mondiriso|persone"
+  },
+  {
     "file": "|Carabiniere|persone-uomo.jpg",
     "name": "Carabiniere|persone-uomo"
   },
@@ -89,24 +121,60 @@ window.ASSETS_MANIFEST = [
     "name": "Cassolnovo|paesaggi-cartoline"
   },
   {
+    "file": "|Cassolnovo|paesaggi.jpg",
+    "name": "Cassolnovo|paesaggi"
+  },
+  {
+    "file": "|Castello_di_Villanova|paesaggi.jpg",
+    "name": "Castello_di_Villanova|paesaggi"
+  },
+  {
     "file": "|Chiesa_Parrocchiale|paesaggi-cartoline.jpg",
     "name": "Chiesa_Parrocchiale|paesaggi-cartoline"
+  },
+  {
+    "file": "|Chiesa_di_San_Bartolomeo_dopo_i_restauri_del_1934|paesaggi.jpg",
+    "name": "Chiesa_di_San_Bartolomeo_dopo_i_restauri_del_1934|paesaggi"
+  },
+  {
+    "file": "|Chiesa_di_San_Bartolomeo_prima_dei_restauri_del_1934|paesaggi.jpg",
+    "name": "Chiesa_di_San_Bartolomeo_prima_dei_restauri_del_1934|paesaggi"
   },
   {
     "file": "|Chiesa_di_San_Bartolomeo|paesaggi-cartoline.jpg",
     "name": "Chiesa_di_San_Bartolomeo|paesaggi-cartoline"
   },
   {
+    "file": "|Chiesa_di_San_Carlo,_Villareale|paesaggi.jpg",
+    "name": "Chiesa_di_San_Carlo,_Villareale|paesaggi"
+  },
+  {
     "file": "|Chiesa_di_San_Giacomo,_1871|paesaggi.jpg",
     "name": "Chiesa_di_San_Giacomo,_1871|paesaggi"
+  },
+  {
+    "file": "|Chiesa_di_San_Giacomo|paesaggi.jpg",
+    "name": "Chiesa_di_San_Giacomo|paesaggi"
   },
   {
     "file": "|Chiesa_di_San_Giorgio, 1964|paesaggi-cartoline.jpg",
     "name": "Chiesa_di_San_Giorgio, 1964|paesaggi-cartoline"
   },
   {
+    "file": "|Chiesa_di_San_Giorgio,_1871|paesaggi.jpg",
+    "name": "Chiesa_di_San_Giorgio,_1871|paesaggi"
+  },
+  {
     "file": "|Chiesa_di_San_Giorgio|paesaggi-cartoline.jpg",
     "name": "Chiesa_di_San_Giorgio|paesaggi-cartoline"
+  },
+  {
+    "file": "|Chiesa_di_San_Giorgio|paesaggi.jpg",
+    "name": "Chiesa_di_San_Giorgio|paesaggi"
+  },
+  {
+    "file": "|Colonia_fluviale_Giuseppe_Milanesi\",_1939.\"|paesaggi.jpg",
+    "name": "Colonia_fluviale_Giuseppe_Milanesi\",_1939.\"|paesaggi"
   },
   {
     "file": "|Colonia_fluviale|paesaggi-cartoline.jpg",
@@ -193,6 +261,10 @@ window.ASSETS_MANIFEST = [
     "name": "Dopolavoro|persone-gruppi"
   },
   {
+    "file": "|Esterno_della_chiesa_di_Villanova_di_Cassolo|paesaggi.jpg",
+    "name": "Esterno_della_chiesa_di_Villanova_di_Cassolo|paesaggi"
+  },
+  {
     "file": "|Eucarestia|persone-gruppi.jpg",
     "name": "Eucarestia|persone-gruppi"
   },
@@ -237,8 +309,8 @@ window.ASSETS_MANIFEST = [
     "name": "Foto_tessere_di_donna|persone-donna"
   },
   {
-    "file": "|Fototessare_di_un_uomo|persone-uomo.jpg",
-    "name": "Fototessare_di_un_uomo|persone-uomo"
+    "file": "|Foto_tessere_di_un_uomo|persone-uomo.jpg",
+    "name": "Foto_tessere_di_un_uomo|persone-uomo"
   },
   {
     "file": "|Fototessera_di_un_uomo_in_divisa|persone-uomo.jpg",
@@ -265,6 +337,66 @@ window.ASSETS_MANIFEST = [
     "name": "Gruppo_di_miliatri|persone-gruppi"
   },
   {
+    "file": "|I_\"Cercatori_d'oro\"_al_lavoro_1|persone.jpg",
+    "name": "I_\"Cercatori_d'oro\"_al_lavoro_1|persone"
+  },
+  {
+    "file": "|I_\"Cercatori_d'oro\"_al_lavoro_2|persone.jpg",
+    "name": "I_\"Cercatori_d'oro\"_al_lavoro_2|persone"
+  },
+  {
+    "file": "|I_\"Cercatori_d'oro\"_al_lavoro_3|persone.jpg",
+    "name": "I_\"Cercatori_d'oro\"_al_lavoro_3|persone"
+  },
+  {
+    "file": "|I_\"Cercatori_d'oro\"_del_Ticino,_fine_agosto_1933|persone.jpg",
+    "name": "I_\"Cercatori_d'oro\"_del_Ticino,_fine_agosto_1933|persone"
+  },
+  {
+    "file": "|Il_gruppo_delle_\"FIGLIE_DI_MARIA\",_1925|persone.jpg",
+    "name": "Il_gruppo_delle_\"FIGLIE_DI_MARIA\",_1925|persone"
+  },
+  {
+    "file": "|Il_naviglio_langosco|paesaggi.jpg",
+    "name": "Il_naviglio_langosco|paesaggi"
+  },
+  {
+    "file": "|Il_nuovo_PALAZZO_COMUNALE|paesaggi.jpg",
+    "name": "Il_nuovo_PALAZZO_COMUNALE|paesaggi"
+  },
+  {
+    "file": "|Il_passaggio_della_\"MADONNA_PELLEGRINA\"|persone-paesaggi.jpg",
+    "name": "Il_passaggio_della_\"MADONNA_PELLEGRINA\"|persone-paesaggi"
+  },
+  {
+    "file": "|Il_trapianto_delle_piantine_di_riso|persone.jpg",
+    "name": "Il_trapianto_delle_piantine_di_riso|persone"
+  },
+  {
+    "file": "|Inizio_via_strada_vecchia,_1871__(oggi_via_Montebello)|paesaggi.jpg",
+    "name": "Inizio_via_strada_vecchia,_1871__(oggi_via_Montebello)|paesaggi"
+  },
+  {
+    "file": "|Interno_del_castello_di_Villanova|paesaggi.jpg",
+    "name": "Interno_del_castello_di_Villanova|paesaggi"
+  },
+  {
+    "file": "|L'antica_\"cappella\"_dell'antico_Cimitero|paesaggi.jpg",
+    "name": "L'antica_\"cappella\"_dell'antico_Cimitero|paesaggi"
+  },
+  {
+    "file": "|La_Chiesetta_di_San_Martino|paesaggi.jpg",
+    "name": "La_Chiesetta_di_San_Martino|paesaggi"
+  },
+  {
+    "file": "|La_Strada_Regina|paesaggi.png",
+    "name": "La_Strada_Regina|paesaggi"
+  },
+  {
+    "file": "|La_mondina_del_riso|persone.jpg",
+    "name": "La_mondina_del_riso|persone"
+  },
+  {
     "file": "|Laviatoio_via_Montebello|paesaggi-cartoline.jpg",
     "name": "Laviatoio_via_Montebello|paesaggi-cartoline"
   },
@@ -287,6 +419,26 @@ window.ASSETS_MANIFEST = [
   {
     "file": "|Mobili_Sanpietro|paesaggi.jpg",
     "name": "Mobili_Sanpietro|paesaggi"
+  },
+  {
+    "file": "|Molino_San_Giacomo,_luglio_1871|persone-paesaggi.jpg",
+    "name": "Molino_San_Giacomo,_luglio_1871|persone-paesaggi"
+  },
+  {
+    "file": "|Molino_del_Conte,_\"nuova_chiesa_pubblica\"|paesaggi.jpg",
+    "name": "Molino_del_Conte,_\"nuova_chiesa_pubblica\"|paesaggi"
+  },
+  {
+    "file": "|Molino_del_Conte,_\"vecchia_chiesa_pubblica\"|paesaggi.jpg",
+    "name": "Molino_del_Conte,_\"vecchia_chiesa_pubblica\"|paesaggi"
+  },
+  {
+    "file": "|Molino_del_Conte,_Asilo-Convitto|paesaggi.jpg",
+    "name": "Molino_del_Conte,_Asilo-Convitto|paesaggi"
+  },
+  {
+    "file": "|Molino_del_conte_-_Le_chiuse_del_Naviglio_Langosco|paesaggi.jpg",
+    "name": "Molino_del_conte_-_Le_chiuse_del_Naviglio_Langosco|paesaggi"
   },
   {
     "file": "|Molino_del_conte|paesaggi-cartoline.jpg",
@@ -337,12 +489,24 @@ window.ASSETS_MANIFEST = [
     "name": "Naviglio_Langosco|paesaggi-cartoline"
   },
   {
+    "file": "|Oratorio_Maschile_\"S_Luigi_Gonzaga\"|paesaggi.jpg",
+    "name": "Oratorio_Maschile_\"S_Luigi_Gonzaga\"|paesaggi"
+  },
+  {
     "file": "|Piazza_Costa|paesaggi-cartoline.jpg",
     "name": "Piazza_Costa|paesaggi-cartoline"
   },
   {
     "file": "|Piazza_Vittorio_Emanuele_II,_attuale_Via_Lavetelli|paesaggi-cartoline.jpg",
     "name": "Piazza_Vittorio_Emanuele_II,_attuale_Via_Lavetelli|paesaggi-cartoline"
+  },
+  {
+    "file": "|Prevosto_Don_Carlo_Antonio_Gallina|persone.jpg",
+    "name": "Prevosto_Don_Carlo_Antonio_Gallina|persone"
+  },
+  {
+    "file": "|Raccolta_del_riso|persone.jpg",
+    "name": "Raccolta_del_riso|persone"
   },
   {
     "file": "|Ragazza_davanti_alla_statua_di_Don_Bosco|persone-donna.jpg",
@@ -437,6 +601,10 @@ window.ASSETS_MANIFEST = [
     "name": "Signora|persone-donna"
   },
   {
+    "file": "|Strada_di_mezzo|paesaggi.jpg",
+    "name": "Strada_di_mezzo|paesaggi"
+  },
+  {
     "file": "|Ticino|paesaggi.jpg",
     "name": "Ticino|paesaggi"
   },
@@ -521,6 +689,14 @@ window.ASSETS_MANIFEST = [
     "name": "Uomo_nel_deserto|persone-uomo"
   },
   {
+    "file": "|Valle_dei_Volpati|paesaggi.jpg",
+    "name": "Valle_dei_Volpati|paesaggi"
+  },
+  {
+    "file": "|Veduta_dello_Stabilimento_\"Schmid\"|paesaggi.jpg",
+    "name": "Veduta_dello_Stabilimento_\"Schmid\"|paesaggi"
+  },
+  {
     "file": "|Via_Carlo_Alberto,_1871|paesaggi.jpg",
     "name": "Via_Carlo_Alberto,_1871|paesaggi"
   },
@@ -529,24 +705,24 @@ window.ASSETS_MANIFEST = [
     "name": "Via_Carlo_Alberto,_1910-15|paesaggi-cartoline"
   },
   {
-    "file": "|Via_Carlo_Alberto_1|-paesaggi-cartoline.jpg",
-    "name": "Via_Carlo_Alberto_1|-paesaggi-cartoline"
-  },
-  {
-    "file": "|Via_Carlo_Alberto_2|-paesaggi-cartoline.jpg",
-    "name": "Via_Carlo_Alberto_2|-paesaggi-cartoline"
+    "file": "|Via_Carlo_Alberto_1|paesaggi-cartoline.jpg",
+    "name": "Via_Carlo_Alberto_1|paesaggi-cartoline"
   },
   {
     "file": "|Via_Carlo_Alberto_2|paesaggi-cartoline.jpg",
     "name": "Via_Carlo_Alberto_2|paesaggi-cartoline"
   },
   {
-    "file": "|Via_Carlo_Alberto_3|-paesaggi-cartoline.jpg",
-    "name": "Via_Carlo_Alberto_3|-paesaggi-cartoline"
-  },
-  {
     "file": "|Via_Carlo_Alberto_3|paesaggi-cartoline.jpg",
     "name": "Via_Carlo_Alberto_3|paesaggi-cartoline"
+  },
+  {
+    "file": "|Via_Carlo_Alberto_4|paesaggi-cartoline.jpg",
+    "name": "Via_Carlo_Alberto_4|paesaggi-cartoline"
+  },
+  {
+    "file": "|Via_Carlo_Alberto_5|paesaggi-cartoline.jpg",
+    "name": "Via_Carlo_Alberto_5|paesaggi-cartoline"
   },
   {
     "file": "|Via_Carlo_Alberto|paesaggi-cartoline.jpg",
@@ -581,6 +757,10 @@ window.ASSETS_MANIFEST = [
     "name": "Via_Roma|paesaggi-cartoline"
   },
   {
+    "file": "|Via_San_Giorgio,_1890-1900|paesaggi.jpg",
+    "name": "Via_San_Giorgio,_1890-1900|paesaggi"
+  },
+  {
     "file": "|Via_San_Giorgio,_1933|paesaggi-cartoline.jpg",
     "name": "Via_San_Giorgio,_1933|paesaggi-cartoline"
   },
@@ -613,8 +793,16 @@ window.ASSETS_MANIFEST = [
     "name": "Via_Vittorio_Emanuele_II|paesaggi-cartoline"
   },
   {
+    "file": "|Via_strada_vecchia,_1871_(oggi_via_Montebello)|paesaggi.jpg",
+    "name": "Via_strada_vecchia,_1871_(oggi_via_Montebello)|paesaggi"
+  },
+  {
     "file": "|Viale_Rimembranze,_1950|paesaggi-cartoline.jpg",
     "name": "Viale_Rimembranze,_1950|paesaggi-cartoline"
+  },
+  {
+    "file": "|Viale_delle_Rimembranze,_1956\"|paesaggi.jpg",
+    "name": "Viale_delle_Rimembranze,_1956\"|paesaggi"
   },
   {
     "file": "|Vignetta_di_un_ragazzo_in_divisa|persone-uomo.jpg",
