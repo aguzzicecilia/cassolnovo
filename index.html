@@ -185,6 +185,7 @@
       }
       renderFilters();
       renderFilterInfo();
+      setupProgressiveReveal();
     }
 
     const active = new Set();
@@ -229,6 +230,49 @@
       filtersInfo.innerHTML = '';
       filtersInfo.appendChild(frag);
       filtersInfo.classList.add('filtersInfo--visible');
+    }
+
+    const PROGRESSIVE_BLOCK = 24;
+    function setupProgressiveReveal(){
+      const cards = Array.from(projectsEl.querySelectorAll('.project-card'));
+      const total = cards.length;
+      if (window._progressiveObserver) {
+        window._progressiveObserver.disconnect();
+        window._progressiveObserver = null;
+      }
+      if (window._progressiveSentinel && window._progressiveSentinel.parentNode) {
+        window._progressiveSentinel.parentNode.removeChild(window._progressiveSentinel);
+      }
+      cards.forEach(function(card, i){
+        if (i < PROGRESSIVE_BLOCK) {
+          card.classList.remove('progressive-reveal-hidden');
+        } else {
+          card.classList.add('progressive-reveal-hidden');
+        }
+      });
+      if (total <= PROGRESSIVE_BLOCK) return;
+      const sentinel = document.createElement('div');
+      sentinel.id = 'progressive-sentinel';
+      sentinel.setAttribute('aria-hidden', 'true');
+      sentinel.style.cssText = 'height:1px;width:100%;visibility:hidden;pointer-events:none;';
+      projectsEl.appendChild(sentinel);
+      window._progressiveSentinel = sentinel;
+      let visibleCount = PROGRESSIVE_BLOCK;
+      const observer = new IntersectionObserver(function(entries){
+        if (!entries[0].isIntersecting) return;
+        const cardsNow = Array.from(projectsEl.querySelectorAll('.project-card'));
+        for (var i = visibleCount; i < Math.min(visibleCount + PROGRESSIVE_BLOCK, cardsNow.length); i++) {
+          cardsNow[i].classList.remove('progressive-reveal-hidden');
+        }
+        visibleCount += PROGRESSIVE_BLOCK;
+        if (visibleCount >= cardsNow.length) {
+          observer.disconnect();
+          window._progressiveObserver = null;
+          if (sentinel.parentNode) sentinel.parentNode.removeChild(sentinel);
+        }
+      }, { root: null, rootMargin: '100px', threshold: 0 });
+      observer.observe(sentinel);
+      window._progressiveObserver = observer;
     }
 
     let lastScrollY = 0; let orderedCards = []; let currentIndex = 0;

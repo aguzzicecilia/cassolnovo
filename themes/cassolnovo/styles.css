@@ -107,6 +107,8 @@ main{margin-top:62px;flex:1}
 .project-card figure img{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);max-width:calc(100% - (var(--respect) * 2));max-height:calc(100% - (var(--respect) * 2));height:auto;width:auto;object-fit:contain;object-position:center}
 .project-card__title{position:absolute;left:12px;right:12px;bottom:12px;margin:0;text-transform:uppercase;text-align:center;line-height:1}
 .project-card__tags{display:none}
+/* Progressive reveal: hide cards until they are revealed by scroll */
+.project-card.progressive-reveal-hidden{display:none}
 .visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 /* Modal progetto */
