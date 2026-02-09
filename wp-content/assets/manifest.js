@@ -189,6 +189,10 @@ window.ASSETS_MANIFEST = [
     "name": "Coppia| persone-gruppi"
   },
   {
+    "file": "|Cordone_Carolina,_in_Campari|persone-donna.jpg",
+    "name": "Cordone_Carolina,_in_Campari|persone-donna"
+  },
+  {
     "file": "|Corso_Carlo_Alberto_2|paesaggi-cartoline.jpg",
     "name": "Corso_Carlo_Alberto_2|paesaggi-cartoline"
   },
@@ -515,10 +519,6 @@ window.ASSETS_MANIFEST = [
   {
     "file": "|Ragazza_e_uva|persone-donna.jpg",
     "name": "Ragazza_e_uva|persone-donna"
-  },
-  {
-    "file": "|Ragazza_fototessera|persone-donna.jpg",
-    "name": "Ragazza_fototessera|persone-donna"
   },
   {
     "file": "|Ragazza_in_cortile|persone-donna.jpg",
