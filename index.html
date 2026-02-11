@@ -39,6 +39,7 @@
 
     <main>
       <section class="projects" id="projects" aria-label="Progetti"></section>
+      <div id="scrollSentinel" class="visually-hidden" aria-hidden="true"></div>
     </main>
   </div>
 
@@ -114,10 +115,17 @@
     }
 
     const projectsEl = document.getElementById('projects');
+    const sentinelEl = document.getElementById('scrollSentinel');
     const filtersList = document.getElementById('filtersList');
     const filtersInfo = document.getElementById('filtersInfo');
     const headerProject = document.getElementById('headerProject');
     const allTags = new Map();
+    // Pagination state
+    let fullList = [];
+    let currentOffset = 0;
+    const batchSize = 32;
+    let isLoading = false;
+    let pagingObserver = null;
 
     function buildCard(entry){
       const isObj = typeof entry === 'object' && entry !== null;
@@ -129,6 +137,7 @@
       const img = document.createElement('img');
       const src = `./wp-content/assets/${fileName.split('/').map(encodeURIComponent).join('/')}`;
       img.src = `${src}?v=${manifestVersion}`;
+      img.loading = 'lazy';
       img.alt = 'Immagine progetto';
       img.setAttribute('data-filename', dataName);
       img.setAttribute('data-file', fileName);
@@ -141,15 +150,24 @@
 
       const { title, tagsKeys, tagsDisplay } = parseFilename(dataName);
       h3.textContent = title;
-      // accumulate tags for filters (chips remain hidden in UI)
-      tagsDisplay.forEach((label, idx)=>{
-        const key = tagsKeys[idx];
-        const prev = allTags.get(key);
-        const next = { label, count: (prev && prev.count ? prev.count : 0) + 1 };
-        allTags.set(key, next);
-      });
+      // Note: tag totals are computed once from fullList, not here
       article.dataset.tags = JSON.stringify(tagsKeys);
       projectsEl.appendChild(article);
+    }
+
+    function computeTagTotals(list){
+      allTags.clear();
+      (list || []).forEach((entry)=>{
+        const isObj = typeof entry === 'object' && entry !== null;
+        const dataName = isObj ? (entry.name || entry.file) : entry;
+        const { tagsKeys, tagsDisplay } = parseFilename(dataName);
+        tagsDisplay.forEach((label, idx)=>{
+          const key = tagsKeys[idx];
+          const prev = allTags.get(key);
+          const next = { label, count: (prev && prev.count ? prev.count : 0) + 1 };
+          allTags.set(key, next);
+        });
+      });
     }
 
     function getEmbeddedAssets(){ return Array.isArray(window.ASSETS_MANIFEST) ? window.ASSETS_MANIFEST : []; }
@@ -171,9 +189,11 @@
 
     let projectsClickBound = false;
     function renderFromList(list){
+      // Initialize list and reset grid
+      fullList = Array.isArray(list) ? list : [];
       projectsEl.innerHTML = '';
-      allTags.clear();
-      list.forEach(buildCard);
+      // compute totals for filters
+      computeTagTotals(fullList);
       const validKeys = new Set(Array.from(allTags.keys()));
       Array.from(active).forEach(k=>{ if(!validKeys.has(k)) active.delete(k); });
       if(!projectsClickBound){
@@ -185,7 +205,34 @@
       }
       renderFilters();
       renderFilterInfo();
+      // reset paging
+      currentOffset = 0;
+      isLoading = false;
+      // setup observer
       setupProgressiveReveal();
+      // first batch
+      appendNextBatch();
+    }
+
+    function appendNextBatch(){
+      if(isLoading) return;
+      if(currentOffset >= fullList.length){
+        if(pagingObserver){ try{ pagingObserver.disconnect(); }catch(_){ } }
+        return;
+      }
+      isLoading = true;
+      const start = currentOffset;
+      const end = Math.min(currentOffset + batchSize, fullList.length);
+      for(let i=start; i<end; i++){
+        buildCard(fullList[i]);
+      }
+      currentOffset = end;
+      // apply current filter to newly added cards
+      applyFilter();
+      isLoading = false;
+      if(currentOffset >= fullList.length){
+        if(pagingObserver){ try{ pagingObserver.disconnect(); }catch(_){ } }
+      }
     }
 
     const active = new Set();
@@ -232,47 +279,14 @@
       filtersInfo.classList.add('filtersInfo--visible');
     }
 
-    const PROGRESSIVE_BLOCK = 24;
     function setupProgressiveReveal(){
-      const cards = Array.from(projectsEl.querySelectorAll('.project-card'));
-      const total = cards.length;
-      if (window._progressiveObserver) {
-        window._progressiveObserver.disconnect();
-        window._progressiveObserver = null;
-      }
-      if (window._progressiveSentinel && window._progressiveSentinel.parentNode) {
-        window._progressiveSentinel.parentNode.removeChild(window._progressiveSentinel);
-      }
-      cards.forEach(function(card, i){
-        if (i < PROGRESSIVE_BLOCK) {
-          card.classList.remove('progressive-reveal-hidden');
-        } else {
-          card.classList.add('progressive-reveal-hidden');
-        }
-      });
-      if (total <= PROGRESSIVE_BLOCK) return;
-      const sentinel = document.createElement('div');
-      sentinel.id = 'progressive-sentinel';
-      sentinel.setAttribute('aria-hidden', 'true');
-      sentinel.style.cssText = 'height:1px;width:100%;visibility:hidden;pointer-events:none;';
-      projectsEl.appendChild(sentinel);
-      window._progressiveSentinel = sentinel;
-      let visibleCount = PROGRESSIVE_BLOCK;
-      const observer = new IntersectionObserver(function(entries){
-        if (!entries[0].isIntersecting) return;
-        const cardsNow = Array.from(projectsEl.querySelectorAll('.project-card'));
-        for (var i = visibleCount; i < Math.min(visibleCount + PROGRESSIVE_BLOCK, cardsNow.length); i++) {
-          cardsNow[i].classList.remove('progressive-reveal-hidden');
-        }
-        visibleCount += PROGRESSIVE_BLOCK;
-        if (visibleCount >= cardsNow.length) {
-          observer.disconnect();
-          window._progressiveObserver = null;
-          if (sentinel.parentNode) sentinel.parentNode.removeChild(sentinel);
-        }
-      }, { root: null, rootMargin: '100px', threshold: 0 });
-      observer.observe(sentinel);
-      window._progressiveObserver = observer;
+      if(pagingObserver){ try{ pagingObserver.disconnect(); }catch(_){ } }
+      if(!sentinelEl) return;
+      pagingObserver = new IntersectionObserver((entries)=>{
+        const inter = entries.some(e=>e.isIntersecting);
+        if(inter){ appendNextBatch(); }
+      }, { root:null, rootMargin:'200px', threshold:0 });
+      pagingObserver.observe(sentinelEl);
     }
 
     let lastScrollY = 0; let orderedCards = []; let currentIndex = 0;
